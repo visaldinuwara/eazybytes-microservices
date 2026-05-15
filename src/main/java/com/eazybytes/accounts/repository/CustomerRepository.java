@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.eazybytes.accounts.entity.Customer;
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer,String>{
+public interface CustomerRepository extends JpaRepository<Customer,Long>{
     Optional<Customer> findByMobileNumber(String mobileNumber);
     
 }
