@@ -61,7 +61,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Boolean updateAccount(CustomerDto customerDto) {
+    public boolean updateAccount(CustomerDto customerDto) {
        boolean isUpdate=false;
        AccountsDto accountsDto=customerDto.getAccountsDto();
        if(accountsDto!=null){
@@ -80,6 +80,16 @@ public class AccountService implements IAccountService {
         isUpdate=true;
        }
        return isUpdate;
+    }
+
+    @Override
+    public boolean deleteAccount(String mobileNumber) {
+        Customer customer=customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+            ()->new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        );
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+        customerRepository.deleteById(customer.getCustomerId());
+        return true;
     }
 
 }
