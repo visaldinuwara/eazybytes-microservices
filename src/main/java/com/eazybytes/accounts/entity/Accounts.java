@@ -2,8 +2,6 @@ package com.eazybytes.accounts.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +18,6 @@ import lombok.ToString;
 public class Accounts extends BaseEntity{
     //@GeneratedValue(strategy = GenerationType.AUTO,generator="native")
     //@GenericGenerator(name = "native",strategy = "native")  Depricated in recent spring versions
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="customer_id")
     private Long customerId;
     @Column(name="account_number")
