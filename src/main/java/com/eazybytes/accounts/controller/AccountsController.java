@@ -15,13 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.eazybytes.accounts.constants.AccountConstants;
 import com.eazybytes.accounts.dto.CustomerDto;
+import com.eazybytes.accounts.dto.ErrorResponseDto;
 import com.eazybytes.accounts.dto.ResponseDto;
 import com.eazybytes.accounts.service.IAccountService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 
+@Tag(
+    name = "CRUD REST API for Accounts EazyBank",
+    description = "CRUD REST APIs is EazyBank to CREATE,UPDATE,FETCH AND DELETE account details"
+)
 @RestController
 @RequestMapping(value = "/api", produces = { MediaType.APPLICATION_JSON_VALUE })
 @AllArgsConstructor
@@ -29,6 +39,14 @@ import lombok.AllArgsConstructor;
 public class AccountsController {
     private IAccountService iAccountService;
 
+    @Operation(
+        summary = "Create Account REST API",
+        description = "REST API to create new Customer & Account inside EasyBank"
+    )
+    @ApiResponse(
+        responseCode ="201",
+        description = "HTTP Status code"
+    )
     @PostMapping
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
         iAccountService.createAccount(customerDto);
