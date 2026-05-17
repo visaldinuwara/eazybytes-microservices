@@ -1,6 +1,5 @@
 package com.eazybytes.accounts.service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
@@ -31,8 +30,6 @@ public class AccountService implements IAccountService {
             throw new CustomerAlreadyExistsException(
                     "Customer already registered with given mobile number" + customerDto.getMobileNumber());
         }
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("Anonymus");
         Customer savedCustomer = customerRepository.save(customer);
         accountsRepository.save(createNewAccount(savedCustomer));
 
@@ -43,8 +40,6 @@ public class AccountService implements IAccountService {
         newAccount.setCustomerId(customer.getCustomerId());
         newAccount.setAccountNumber(1000000000L + new Random().nextInt(900000000));
         newAccount.setAccountType(AccountConstants.SAVINGS);
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("Anonymus");
         return newAccount;
     }
 
