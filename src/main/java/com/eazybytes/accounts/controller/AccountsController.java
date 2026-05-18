@@ -23,15 +23,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 
-@Tag(
-    name = "CRUD REST API for Accounts EazyBank",
-    description = "CRUD REST APIs is EazyBank to CREATE,UPDATE,FETCH AND DELETE account details"
-)
+@Tag(name = "CRUD REST API for Accounts EazyBank", description = "CRUD REST APIs is EazyBank to CREATE,UPDATE,FETCH AND DELETE account details")
 @RestController
 @RequestMapping(value = "/api", produces = { MediaType.APPLICATION_JSON_VALUE })
 @AllArgsConstructor
@@ -39,14 +37,8 @@ import lombok.AllArgsConstructor;
 public class AccountsController {
     private IAccountService iAccountService;
 
-    @Operation(
-        summary = "Create Account REST API",
-        description = "REST API to create new Customer & Account inside EasyBank"
-    )
-    @ApiResponse(
-        responseCode ="201",
-        description = "HTTP Status code"
-    )
+    @Operation(summary = "Create Account REST API", description = "REST API to create new Customer & Account inside EasyBank")
+    @ApiResponse(responseCode = "201", description = "HTTP Status code")
     @PostMapping
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
         iAccountService.createAccount(customerDto);
@@ -62,6 +54,24 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
 
+@ApiResponses({
+    @ApiResponse(
+        responseCode ="200",
+        description = "HTTP Status code"
+    ),
+    @ApiResponse(
+        responseCode = "417",
+        description = "Expectation Failed"
+    ),
+    @ApiResponse(
+        responseCode = "500",
+        description = "HTTP Status Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDto.class)
+        )
+    ),
+}
+)
     @PutMapping
     public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestParam CustomerDto customerDto) {
         boolean isUpdated = iAccountService.updateAccount(customerDto);
@@ -70,10 +80,28 @@ public class AccountsController {
                     .body(new ResponseDto(AccountConstants.STATUS_200, AccountConstants.MESSAGE_200));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDto(AccountConstants.STATUS_500, AccountConstants.MESSAGE_500));
+                    .body(new ResponseDto(AccountConstants.Status_417, AccountConstants.MESSAGE_417_UPDATE));
         }
     }
 
+@ApiResponses({
+    @ApiResponse(
+        responseCode ="200",
+        description = "HTTP Status code"
+    ),
+    @ApiResponse(
+        responseCode = "417",
+        description = "Expectation Failed"
+    ),
+    @ApiResponse(
+        responseCode = "500",
+        description = "HTTP Status Internal Server Error",
+        content = @Content(
+            schema = @Schema(implementation = ErrorResponseDto.class)
+        )
+    ),
+}
+)
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteAccountDetail(
             @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit") String mobileNumber) {
@@ -83,7 +111,7 @@ public class AccountsController {
                     .body(new ResponseDto(AccountConstants.STATUS_200, AccountConstants.MESSAGE_200));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDto(AccountConstants.STATUS_500, AccountConstants.MESSAGE_500));
+                    .body(new ResponseDto(AccountConstants.Status_417, AccountConstants.MESSAGE_417_DELETE));
         }
     }
 }
